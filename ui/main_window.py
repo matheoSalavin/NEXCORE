@@ -6,6 +6,7 @@ from collections import deque
 from PySide6.QtCore import Qt, QTimer
 from services.process_manager import ProcessWorker, terminate_process
 from services.system_monitor import get_system_metrics
+from services.health_analyzer import analyze_system
 from PySide6.QtWidgets import (
     QApplication, QFrame, QHBoxLayout, QLabel, QMainWindow,
     QPushButton, QStackedWidget, QVBoxLayout, QWidget,
@@ -14,17 +15,17 @@ from PySide6.QtWidgets import (
 )
 
 # ============================================================
-# FENÊTRE PRINCIPALE DE PC SENTINEL
+# FENÊTRE PRINCIPALE DE NEXCORE
 # ============================================================
 
-class PCSentinel(QMainWindow):
+class Nexcore(QMainWindow):
     """Contient les pages, les mesures et les interactions de l'application."""
 
     def __init__(self):
         super().__init__()
 
         # Configuration générale de la fenêtre.
-        self.setWindowTitle("PC Sentinel")
+        self.setWindowTitle("NEXCORE")
         self.resize(1250, 780)
         self.setMinimumSize(1000, 650)
 
@@ -177,7 +178,7 @@ class PCSentinel(QMainWindow):
         side.setContentsMargins(16, 24, 16, 20)
         side.setSpacing(10)
 
-        logo = QLabel("◈ PC SENTINEL")
+        logo = QLabel("◈ NEXCORE")
         logo.setStyleSheet(
             "color: #55a6ff; font-size: 19px; font-weight: bold; padding: 8px;"
         )
@@ -213,7 +214,7 @@ class PCSentinel(QMainWindow):
         # Place les informations de version en bas du menu.
         side.addStretch()
 
-        version = QLabel("PC Sentinel 1.3\nMonitoring local")
+        version = QLabel("NEXCORE 1.3\nMonitoring local")
         version.setObjectName("muted")
         version.setStyleSheet("padding: 8px;")
         side.addWidget(version)
@@ -329,20 +330,67 @@ class PCSentinel(QMainWindow):
         heading.setObjectName("heading")
         layout.addWidget(heading)
 
-        intro = QLabel("État de santé et activité de votre ordinateur")
+        intro = QLabel(
+            "Diagnostic intelligent et activité de votre ordinateur"
+        )
         intro.setObjectName("muted")
         layout.addWidget(intro)
 
-        # Trois cartes : processeur, mémoire vive et stockage.
+        # ----------------------------------------------------
+        # Score NEXCORE
+        # ----------------------------------------------------
+
+        score_panel, score_layout = self.create_panel("Score NEXCORE")
+
+        score_row = QHBoxLayout()
+
+        self.health_score = QLabel("--")
+        self.health_score.setStyleSheet(
+            "font-size: 52px; font-weight: bold; color: #55a6ff;"
+        )
+
+        self.health_score_suffix = QLabel("/ 100")
+        self.health_score_suffix.setObjectName("muted")
+        self.health_score_suffix.setStyleSheet("font-size: 20px;")
+
+        self.health_status = QLabel("ANALYSE EN COURS")
+        self.health_status.setStyleSheet(
+            "font-size: 18px; font-weight: bold;"
+        )
+
+        score_row.addWidget(self.health_score)
+        score_row.addWidget(self.health_score_suffix)
+        score_row.addSpacing(20)
+        score_row.addWidget(self.health_status)
+        score_row.addStretch()
+
+        score_layout.addLayout(score_row)
+
+        self.health_diagnostics = QLabel(
+            "Analyse de l'état du système..."
+        )
+        self.health_diagnostics.setObjectName("muted")
+        self.health_diagnostics.setWordWrap(True)
+
+        score_layout.addWidget(self.health_diagnostics)
+
+        layout.addWidget(score_panel)
+
+        # ----------------------------------------------------
+        # CPU / RAM / stockage
+        # ----------------------------------------------------
+
         cards = QHBoxLayout()
         cards.setSpacing(16)
 
         cpu_card, self.cpu_value, self.cpu_detail = self.create_card(
             "PROCESSEUR"
         )
+
         ram_card, self.ram_value, self.ram_detail = self.create_card(
             "MÉMOIRE VIVE"
         )
+
         disk_card, self.disk_value, self.disk_detail = self.create_card(
             "STOCKAGE"
         )
@@ -350,24 +398,36 @@ class PCSentinel(QMainWindow):
         cards.addWidget(cpu_card)
         cards.addWidget(ram_card)
         cards.addWidget(disk_card)
+
         layout.addLayout(cards)
 
-        # Panneau consacré aux informations générales du PC.
-        panel, panel_layout = self.create_panel("Informations système")
+        # ----------------------------------------------------
+        # Informations système
+        # ----------------------------------------------------
 
-        self.system_info = QLabel("Collecte des informations...")
+        panel, panel_layout = self.create_panel(
+            "Informations système"
+        )
+
+        self.system_info = QLabel(
+            "Collecte des informations..."
+        )
         self.system_info.setObjectName("muted")
 
-        # Autorise la sélection du texte pour pouvoir le copier.
-        self.system_info.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.system_info.setTextInteractionFlags(
+            Qt.TextSelectableByMouse
+        )
 
         panel_layout.addWidget(self.system_info)
         layout.addWidget(panel)
+
         layout.addStretch()
 
-        # Message indiquant l'état de la collecte.
-        self.home_status = QLabel("Initialisation des mesures...")
+        self.home_status = QLabel(
+            "Initialisation des mesures..."
+        )
         self.home_status.setObjectName("muted")
+
         layout.addWidget(self.home_status)
 
         return page
@@ -620,6 +680,28 @@ class PCSentinel(QMainWindow):
         try:
             # Utilisation actuelle du processeur en pourcentage.
             metrics = get_system_metrics()
+            analysis = analyze_system(metrics)
+                        # Mise à jour du Score NEXCORE.
+            self.health_score.setText(str(analysis["score"]))
+            self.health_status.setText(analysis["status"])
+
+            # Affiche les diagnostics.
+            diagnostic_lines = []
+
+            for level, message in analysis["diagnostics"]:
+                if level == "good":
+                    icon = "✓"
+                elif level == "warning":
+                    icon = "⚠"
+                else:
+                    icon = "●"
+
+                diagnostic_lines.append(f"{icon} {message}")
+
+            self.health_diagnostics.setText(
+                "   •   ".join(diagnostic_lines)
+            )
+            
             cpu = metrics["cpu"]
 
             # Informations sur la mémoire vive.
@@ -920,7 +1002,7 @@ class PCSentinel(QMainWindow):
             QMessageBox.warning(
                 self,
                 "Action impossible",
-                "PC Sentinel ne peut pas terminer son propre processus."
+                "NEXCORE ne peut pas terminer son propre processus."
             )
             return
 
@@ -1010,6 +1092,6 @@ class PCSentinel(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = PCSentinel()
+    window = Nexcore()
     window.show()
     sys.exit(app.exec())
