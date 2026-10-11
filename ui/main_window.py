@@ -4,7 +4,7 @@ import pyqtgraph as pg
 
 from collections import deque
 from PySide6.QtCore import Qt, QTimer
-from services.process_manager import ProcessWorker
+from services.process_manager import ProcessWorker, terminate_process
 from services.system_monitor import get_system_metrics
 from PySide6.QtWidgets import (
     QApplication, QFrame, QHBoxLayout, QLabel, QMainWindow,
@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 # ============================================================
-# FENÊTRE PRINCIPALE DE NEXCORE
+# FENÊTRE PRINCIPALE DE PC SENTINEL
 # ============================================================
 
 class PCSentinel(QMainWindow):
@@ -620,7 +620,7 @@ class PCSentinel(QMainWindow):
         try:
             # Utilisation actuelle du processeur en pourcentage.
             metrics = get_system_metrics()
-            cpu = metrics["cpu"] 
+            cpu = metrics["cpu"]
 
             # Informations sur la mémoire vive.
             memory = type("Memory", (), {
@@ -1008,3 +1008,8 @@ class PCSentinel(QMainWindow):
 # POINT D'ENTRÉE DU PROGRAMME
 # ============================================================
 
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = PCSentinel()
+    window.show()
+    sys.exit(app.exec())
