@@ -1,4 +1,4 @@
-\# 🖥️ NEXCORE
+\#NEXCORE
 
 
 
@@ -10,27 +10,27 @@ Elle permet de surveiller facilement les performances d'un PC Windows grâce à 
 
 
 
-\## ✨ Fonctionnalités
+\## Fonctionnalités
 
 
 
-\- 📊 Surveillance de l'utilisation du processeur
+\- Surveillance de l'utilisation du processeur
 
-\- 🧠 Surveillance de la mémoire RAM
+\- Surveillance de la mémoire RAM
 
-\- 💾 Surveillance du stockage
+\- Surveillance du stockage
 
-\- 📈 Graphiques de performances en temps réel
+\- Graphiques de performances en temps réel
 
-\- ⚙️ Affichage des processus en cours
+\- Affichage des processus en cours
 
-\- 🔍 Informations système
+\- Informations système
 
-\- 🖥️ Interface graphique moderne
+\- Interface graphique moderne
 
 
 
-\## 🛠️ Technologies utilisées
+\## Technologies utilisées
 
 
 
@@ -44,7 +44,7 @@ Elle permet de surveiller facilement les performances d'un PC Windows grâce à 
 
 
 
-\## 📁 Structure du projet
+\## Structure du projet
 
 
 
