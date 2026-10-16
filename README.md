@@ -1,4 +1,4 @@
-\#NEXCORE
+\ NEXCORE
 
 
 
@@ -10,7 +10,7 @@ Elle permet de surveiller facilement les performances d'un PC Windows grâce à 
 
 
 
-\## Fonctionnalités
+\ Fonctionnalités
 
 
 
@@ -30,7 +30,7 @@ Elle permet de surveiller facilement les performances d'un PC Windows grâce à 
 
 
 
-\## Technologies utilisées
+\ Technologies utilisées
 
 
 
@@ -44,7 +44,7 @@ Elle permet de surveiller facilement les performances d'un PC Windows grâce à 
 
 
 
-\## Structure du projet
+\ Structure du projet
 
 
 
