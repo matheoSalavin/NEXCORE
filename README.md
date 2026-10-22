@@ -41,6 +41,3 @@ Technologies utilisées
 - psutil
 
 - PyQtGraph
-
-&#x20;   └── main\_window.py
-
