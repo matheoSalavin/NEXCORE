@@ -1,4 +1,4 @@
-\ NEXCORE
+NEXCORE
 
 
 
@@ -10,65 +10,37 @@ Elle permet de surveiller facilement les performances d'un PC Windows grâce à 
 
 
 
-\ Fonctionnalités
+Fonctionnalités
 
 
 
-\- Surveillance de l'utilisation du processeur
+- Surveillance de l'utilisation du processeur
 
-\- Surveillance de la mémoire RAM
+- Surveillance de la mémoire RAM
 
-\- Surveillance du stockage
+- Surveillance du stockage
 
-\- Graphiques de performances en temps réel
+- Graphiques de performances en temps réel
 
-\- Affichage des processus en cours
+- Affichage des processus en cours
 
-\- Informations système
+- Informations système
 
-\- Interface graphique moderne
-
-
-
-\ Technologies utilisées
+- Interface graphique moderne
 
 
 
-\- Python
-
-\- PySide6
-
-\- psutil
-
-\- PyQtGraph
+Technologies utilisées
 
 
 
-\ Structure du projet
+- Python
 
+- PySide6
 
+- psutil
 
-```text
-
-NEXCORE/
-
-├── main.py
-
-├── requirements.txt
-
-├── README.md
-
-├── services/
-
-│   ├── \_\_init\_\_.py
-
-│   ├── process\_manager.py
-
-│   └── system\_monitor.py
-
-└── ui/
-
-&#x20;   ├── \_\_init\_\_.py
+- PyQtGraph
 
 &#x20;   └── main\_window.py
 
